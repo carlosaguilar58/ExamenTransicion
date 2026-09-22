@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Examen: Transición y Operación de Servicios</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #e9ecef;
+            --success: #28a745;
+            --danger: #dc3545;
+            --text: #333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: #fff;
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-top: 0;
+        }
+        .progress {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .question-box {
+            display: none;
+        }
+        .question-box.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .option {
+            background: var(--secondary);
+            border: 2px solid transparent;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background: #d3d9df;
+        }
+        .option.correct {
+            background: #d4edda;
+            border-color: var(--success);
+            color: #155724;
+        }
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: var(--danger);
+            color: #721c24;
+        }
+        .option.disabled {
+            pointer-events: none;
+        }
+        .explanation {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #e2e3e5;
+            border-left: 5px solid var(--primary);
+            border-radius: 4px;
+        }
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            display: none;
+        }
+        .btn:hover {
+            background: #004494;
+        }
+        .score-board {
+            text-align: center;
+            display: none;
+        }
+        .score-board h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Examen de Práctica: Gestión de Datos</h1>
+    
+    <div id="quiz-container">
+        <div class="progress" id="progress">Pregunta 1 de X</div>
+        <div id="questions-area"></div>
+        <button class="btn" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta</button>
+    </div>
+
+    <div class="score-board" id="score-board">
+        <h2>Resultados</h2>
+        <p id="score-text"></p>
+        <button class="btn" style="display: inline-block; width: auto;" onclick="startQuiz()">Repetir Examen (Preguntas Aleatorias)</button>
+    </div>
+</div>
+
+<script>
+    const database = [
+        {
+            q: "¿Cuáles son las etapas correctas del ciclo de vida de los datos?",
+            options: [
+                { text: "Captura, Almacenamiento, Procesamiento, Análisis, Consumo, Retención/Eliminación", correct: true },
+                { text: "Creación, Ingesta, Data Warehouse, Machine Learning, Visualización, Borrado", correct: false },
+                { text: "Captura, ETL, Streaming, Dashboards, Auditoría", correct: false }
+            ],
+            exp: "El ciclo de vida del dato abarca seis etapas clave: Captura, Almacenamiento, Procesamiento, Análisis, Consumo y Retención/Eliminación[cite: 5, 6]."
+        },
+        {
+            q: "El concepto que permite rastrear el origen y las transformaciones de un dato a lo largo de todo su ciclo de vida se denomina:",
+            options: [
+                { text: "Lineage (Trazabilidad)", correct: true },
+                { text: "Gobernanza de Datos", correct: false },
+                { text: "Catálogo de Datos", correct: false }
+            ],
+            exp: "El lineage registra el origen y cada transformación del dato, siendo esencial para auditorías y para detectar en qué paso ocurrió un error[cite: 5, 6]."
+        },
+        {
+            q: "Las transacciones bancarias, los registros de clientes en bases de datos relacionales y los inventarios son ejemplos de:",
+            options: [
+                { text: "Datos Estructurados", correct: true },
+                { text: "Datos No Estructurados", correct: false },
+                { text: "Datos Semi-estructurados", correct: false }
+            ],
+            exp: "Los datos estructurados están organizados en tablas y bases de datos con un esquema definido, y son fácilmente consultables con SQL[cite: 5, 6]."
+        },
+        {
+            q: "En una arquitectura de datos, si guardamos datos en bruto (Raw Data) para exploración futura sin un formato predefinido, estamos utilizando un:",
+            options: [
+                { text: "Data Lake", correct: true },
+                { text: "Data Warehouse", correct: false },
+                { text: "Lakehouse", correct: false }
+            ],
+            exp: "El Data Lake almacena datos en bruto para exploración y análisis avanzado, aceptando cualquier formato (imágenes, audios, logs, JSON)[cite: 5, 6]."
+        },
+        {
+            q: "Según los roles de gobernanza de datos, ¿quién es el responsable de administrar la infraestructura y el acceso técnico a los datos?",
+            options: [
+                { text: "Data Custodian", correct: true },
+                { text: "Data Owner", correct: false },
+                { text: "Data Steward", correct: false }
+            ],
+            exp: "El Data Custodian gestiona la infraestructura y el acceso técnico, mientras que el Data Owner decide su uso estratégico y el Data Steward gestiona las reglas de calidad[cite: 5, 6]."
+        },
+        {
+            q: "¿Qué dimensión de la calidad de los datos mide que los campos requeridos estén llenos y no falte información?",
+            options: [
+                { text: "Completitud", correct: true },
+                { text: "Exactitud", correct: false },
+                { text: "Consistencia", correct: false }
+            ],
+            exp: "La completitud indica que los campos están llenos[cite: 5]. Por ejemplo, si el 10% de los correos electrónicos están vacíos, la campaña pierde impacto[cite: 5]."
+        },
+        {
+            q: "En el procesamiento de datos, ¿qué arquitectura es ideal para detectar fraudes bancarios en tiempo real (menos de 2 segundos)?",
+            options: [
+                { text: "Streaming", correct: true },
+                { text: "Batch", correct: false },
+                { text: "Data Warehouse tradicional", correct: false }
+            ],
+            exp: "El procesamiento en Streaming analiza eventos en tiempo real para detección inmediata de anomalías y baja latencia, a diferencia del Batch que procesa por lotes[cite: 5, 6]."
+        },
+        {
+            q: "En la integración de datos moderna (Cloud/Big Data), el patrón que carga primero los datos crudos en la nube y los transforma según la demanda utilizando el motor analítico se llama:",
+            options: [
+                { text: "ELT (Extract, Load, Transform)", correct: true },
+                { text: "ETL (Extract, Transform, Load)", correct: false },
+                { text: "Lakehouse Batch", correct: false }
+            ],
+            exp: "El patrón ELT (Moderno) extrae, carga los datos en bruto directamente en la nube y luego los transforma utilizando el poder de cómputo elástico[cite: 5, 6]."
+        },
+        {
+            q: "Para que un dato, como el número '100', sea interpretable y tenga utilidad (saber si son ventas, grados o usuarios), siempre debe estar acompañado de:",
+            options: [
+                { text: "Metadata", correct: true },
+                { text: "Un Catálogo de Datos", correct: false },
+                { text: "Un Dashboard", correct: false }
+            ],
+            exp: "La metadata describe el contexto del dato (qué mide, cuándo, quién lo generó). Un dato sin metadata carece de utilidad[cite: 5, 6]."
+        },
+        {
+            q: "En cuanto a privacidad y cumplimiento normativo en México, ¿cuáles son las regulaciones y autoridades mencionadas que establecen los marcos para operar con datos personales?",
+            options: [
+                { text: "INAI y LFPDPPP", correct: true },
+                { text: "GDPR y AWS", correct: false },
+                { text: "FEPADE y ARCO", correct: false }
+            ],
+            exp: "En México, el INAI y la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) establecen los marcos regulatorios[cite: 5, 6]."
+        }
+    ];
+
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function startQuiz() {
+        // Reset variables
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById('score-board').style.display = 'none';
+        document.getElementById('quiz-container').style.display = 'block';
+        
+        // Clone and shuffle questions
+        currentQuestions = JSON.parse(JSON.stringify(database));
+        shuffleArray(currentQuestions);
+        
+        // Shuffle options for each question
+        currentQuestions.forEach(q => shuffleArray(q.options));
+
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const qArea = document.getElementById('questions-area');
+        const qData = currentQuestions[currentQuestionIndex];
+        
+        document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
+        document.getElementById('next-btn').style.display = 'none';
+
+        let html = `
+            <div class="question-box active">
+                <div class="question-text">${qData.q}</div>
+        `;
+
+        qData.options.forEach((opt, index) => {
+            html += `<div class="option" onclick="checkAnswer(this, ${opt.correct}, '${escapeHtml(qData.exp)}')">${opt.text}</div>`;
+        });
+
+        html += `
+                <div class="explanation" id="exp-${currentQuestionIndex}"></div>
+            </div>
+        `;
+
+        qArea.innerHTML = html;
+    }
+
+    function checkAnswer(element, isCorrect, explanationText) {
+        // Disable all options
+        const options = document.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.add('disabled'));
+
+        // Highlight selected
+        if (isCorrect) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('incorrect');
+            // Show the correct one
+            options.forEach(opt => {
+                if (opt.onclick.toString().includes('true')) {
+                    opt.classList.add('correct');
+                }
+            });
+        }
+
+        // Show explanation
+        const expDiv = document.getElementById(`exp-${currentQuestionIndex}`);
+        expDiv.innerHTML = `<strong>Explicación:</strong> ${explanationText}`;
+        expDiv.style.display = 'block';
+
+        // Show next button
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < currentQuestions.length) {
+            renderQuestion();
+        } else {
+            showScore();
+        }
+    }
+
+    function showScore() {
+        document.getElementById('quiz-container').style.display = 'none';
+        const scoreBoard = document.getElementById('score-board');
+        scoreBoard.style.display = 'block';
+        
+        const percentage = Math.round((score / currentQuestions.length) * 100);
+        let message = "";
+        
+        if(percentage >= 90) message = "¡Excelente preparación!";
+        else if(percentage >= 70) message = "Buen trabajo, pero repasa algunos conceptos.";
+        else message = "Necesitas estudiar más las presentaciones.";
+
+        document.getElementById('score-text').innerHTML = `Obtuviste <strong>${score}</strong> de <strong>${currentQuestions.length}</strong> aciertos (${percentage}%).<br><br>${message}`;
+    }
+
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Initialize quiz on load
+    window.onload = startQuiz;
+</script>
+
+</body>
+</html>
