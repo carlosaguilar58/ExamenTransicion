@@ -3,346 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Examen: Transición y Operación de Servicios</title>
+    <title>Simulador de Examen: Transición y Operación de Servicios (40 Preguntas)</title>
     <style>
-        :root {
-            --primary: #0056b3;
-            --secondary: #e9ecef;
-            --success: #28a745;
-            --danger: #dc3545;
-            --text: #333;
-        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            background: #fff;
-            max-width: 800px;
-            width: 100%;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
         h1 {
-            color: var(--primary);
             text-align: center;
-            margin-top: 0;
+            color: #0056b3;
         }
-        .progress {
-            font-weight: bold;
-            color: #666;
-            margin-bottom: 20px;
+        .quiz-container {
+            background: #fff;
+            padding: 25px 35px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 400px;
         }
-        .question-box {
+        .question-block {
             display: none;
         }
-        .question-box.active {
+        .question-block.active {
             display: block;
-            animation: fadeIn 0.4s;
         }
-        .question-text {
-            font-size: 1.2rem;
+        .question-title {
+            font-size: 1.25em;
             font-weight: bold;
             margin-bottom: 20px;
+            color: #2c3e50;
         }
-        .option {
-            background: var(--secondary);
-            border: 2px solid transparent;
+        .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
             padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
+            font-size: 1em;
+            transition: all 0.2s ease-in-out;
         }
-        .option:hover {
-            background: #d3d9df;
+        .option-btn:hover:not(:disabled) {
+            background: #e2e6ea;
+            border-color: #dae0e5;
         }
-        .option.correct {
-            background: #d4edda;
-            border-color: var(--success);
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+        .correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
             color: #155724;
+            font-weight: bold;
         }
-        .option.incorrect {
-            background: #f8d7da;
-            border-color: var(--danger);
+        .incorrect {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
             color: #721c24;
         }
-        .option.disabled {
-            pointer-events: none;
-        }
         .explanation {
-            display: none;
             margin-top: 15px;
             padding: 15px;
-            background: #e2e3e5;
-            border-left: 5px solid var(--primary);
+            background: #e9ecef;
+            border-left: 5px solid #0056b3;
             border-radius: 4px;
+            display: none;
+            font-size: 0.95em;
+            line-height: 1.5;
         }
-        .btn {
-            background: var(--primary);
-            color: #fff;
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: #0056b3;
+            color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            display: none;
+            font-size: 1em;
+            font-weight: bold;
         }
-        .btn:hover {
+        .nav-btn:hover {
             background: #004494;
         }
-        .score-board {
+        .nav-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            height: 10px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #0056b3;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .progress-text {
             text-align: center;
-            display: none;
-        }
-        .score-board h2 {
-            font-size: 2rem;
             margin-bottom: 10px;
+            font-weight: bold;
+            color: #6c757d;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .score-display {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #28a745;
+            display: none;
+            padding: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Examen de Práctica: Gestión de Datos</h1>
+    <h1>Simulador Integral: Gestión de Datos (40 Preguntas)</h1>
     
-    <div id="quiz-container">
-        <div class="progress" id="progress">Pregunta 1 de X</div>
-        <div id="questions-area"></div>
-        <button class="btn" id="next-btn" onclick="nextQuestion()">Siguiente Pregunta</button>
+    <div class="progress-text" id="progress-text">Preparando examen...</div>
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div class="quiz-container" id="quiz-container">
+        <!-- Contenedor dinámico -->
     </div>
 
-    <div class="score-board" id="score-board">
-        <h2>Resultados</h2>
-        <p id="score-text"></p>
-        <button class="btn" style="display: inline-block; width: auto;" onclick="startQuiz()">Repetir Examen (Preguntas Aleatorias)</button>
+    <div class="controls">
+        <button class="nav-btn" id="btn-restart" onclick="iniciarExamen()">Reiniciar Examen</button>
+        <button class="nav-btn" id="btn-next" onclick="siguientePregunta()" disabled>Siguiente Pregunta</button>
     </div>
-</div>
 
-<script>
-    const database = [
-        {
-            q: "¿Cuáles son las etapas correctas del ciclo de vida de los datos?",
-            options: [
-                { text: "Captura, Almacenamiento, Procesamiento, Análisis, Consumo, Retención/Eliminación", correct: true },
-                { text: "Creación, Ingesta, Data Warehouse, Machine Learning, Visualización, Borrado", correct: false },
-                { text: "Captura, ETL, Streaming, Dashboards, Auditoría", correct: false }
-            ],
-            exp: "El ciclo de vida del dato abarca seis etapas clave: Captura, Almacenamiento, Procesamiento, Análisis, Consumo y Retención/Eliminación[cite: 5, 6]."
-        },
-        {
-            q: "El concepto que permite rastrear el origen y las transformaciones de un dato a lo largo de todo su ciclo de vida se denomina:",
-            options: [
-                { text: "Lineage (Trazabilidad)", correct: true },
-                { text: "Gobernanza de Datos", correct: false },
-                { text: "Catálogo de Datos", correct: false }
-            ],
-            exp: "El lineage registra el origen y cada transformación del dato, siendo esencial para auditorías y para detectar en qué paso ocurrió un error[cite: 5, 6]."
-        },
-        {
-            q: "Las transacciones bancarias, los registros de clientes en bases de datos relacionales y los inventarios son ejemplos de:",
-            options: [
-                { text: "Datos Estructurados", correct: true },
-                { text: "Datos No Estructurados", correct: false },
-                { text: "Datos Semi-estructurados", correct: false }
-            ],
-            exp: "Los datos estructurados están organizados en tablas y bases de datos con un esquema definido, y son fácilmente consultables con SQL[cite: 5, 6]."
-        },
-        {
-            q: "En una arquitectura de datos, si guardamos datos en bruto (Raw Data) para exploración futura sin un formato predefinido, estamos utilizando un:",
-            options: [
-                { text: "Data Lake", correct: true },
-                { text: "Data Warehouse", correct: false },
-                { text: "Lakehouse", correct: false }
-            ],
-            exp: "El Data Lake almacena datos en bruto para exploración y análisis avanzado, aceptando cualquier formato (imágenes, audios, logs, JSON)[cite: 5, 6]."
-        },
-        {
-            q: "Según los roles de gobernanza de datos, ¿quién es el responsable de administrar la infraestructura y el acceso técnico a los datos?",
-            options: [
-                { text: "Data Custodian", correct: true },
-                { text: "Data Owner", correct: false },
-                { text: "Data Steward", correct: false }
-            ],
-            exp: "El Data Custodian gestiona la infraestructura y el acceso técnico, mientras que el Data Owner decide su uso estratégico y el Data Steward gestiona las reglas de calidad[cite: 5, 6]."
-        },
-        {
-            q: "¿Qué dimensión de la calidad de los datos mide que los campos requeridos estén llenos y no falte información?",
-            options: [
-                { text: "Completitud", correct: true },
-                { text: "Exactitud", correct: false },
-                { text: "Consistencia", correct: false }
-            ],
-            exp: "La completitud indica que los campos están llenos[cite: 5]. Por ejemplo, si el 10% de los correos electrónicos están vacíos, la campaña pierde impacto[cite: 5]."
-        },
-        {
-            q: "En el procesamiento de datos, ¿qué arquitectura es ideal para detectar fraudes bancarios en tiempo real (menos de 2 segundos)?",
-            options: [
-                { text: "Streaming", correct: true },
-                { text: "Batch", correct: false },
-                { text: "Data Warehouse tradicional", correct: false }
-            ],
-            exp: "El procesamiento en Streaming analiza eventos en tiempo real para detección inmediata de anomalías y baja latencia, a diferencia del Batch que procesa por lotes[cite: 5, 6]."
-        },
-        {
-            q: "En la integración de datos moderna (Cloud/Big Data), el patrón que carga primero los datos crudos en la nube y los transforma según la demanda utilizando el motor analítico se llama:",
-            options: [
-                { text: "ELT (Extract, Load, Transform)", correct: true },
-                { text: "ETL (Extract, Transform, Load)", correct: false },
-                { text: "Lakehouse Batch", correct: false }
-            ],
-            exp: "El patrón ELT (Moderno) extrae, carga los datos en bruto directamente en la nube y luego los transforma utilizando el poder de cómputo elástico[cite: 5, 6]."
-        },
-        {
-            q: "Para que un dato, como el número '100', sea interpretable y tenga utilidad (saber si son ventas, grados o usuarios), siempre debe estar acompañado de:",
-            options: [
-                { text: "Metadata", correct: true },
-                { text: "Un Catálogo de Datos", correct: false },
-                { text: "Un Dashboard", correct: false }
-            ],
-            exp: "La metadata describe el contexto del dato (qué mide, cuándo, quién lo generó). Un dato sin metadata carece de utilidad[cite: 5, 6]."
-        },
-        {
-            q: "En cuanto a privacidad y cumplimiento normativo en México, ¿cuáles son las regulaciones y autoridades mencionadas que establecen los marcos para operar con datos personales?",
-            options: [
-                { text: "INAI y LFPDPPP", correct: true },
-                { text: "GDPR y AWS", correct: false },
-                { text: "FEPADE y ARCO", correct: false }
-            ],
-            exp: "En México, el INAI y la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP) establecen los marcos regulatorios[cite: 5, 6]."
+    <script>
+        const bancoPreguntas = [
+            // 1-10: Fundamentos y Conceptos de Datos
+            {
+                pregunta: "¿Qué diferencia existe entre un dato aislado y la información?",
+                opciones: [
+                    { texto: "El dato carece de utilidad sin contexto (metadata); la información es el dato con contexto, volviéndolo accionable.", correcta: true },
+                    { texto: "El dato siempre es estructurado, mientras que la información siempre es texto libre.", correcta: false },
+                    { texto: "El dato se almacena en la nube, y la información en servidores físicos.", correcta: false },
+                    { texto: "No hay diferencia, son sinónimos exactos en TI.", correcta: false }
+                ],
+                explicacion: "Sin contexto, el dato carece de utilidad[cite: 6]. El contexto (metadata) vuelve interpretable al dato[cite: 5]. Dato + metadata = información accionable[cite: 6]."
+            },
+            {
+                pregunta: "¿Cuál es el riesgo principal de tomar decisiones en una campaña de marketing sin datos fiables?",
+                opciones: [
+                    { texto: "Gastar presupuesto en audiencias equivocadas y dañar la reputación.", correcta: true },
+                    { texto: "El aumento automático de la latencia en la red.", correcta: false },
+                    { texto: "La eliminación accidental del catálogo de datos.", correcta: false },
+                    { texto: "La conversión automática de datos Batch a Streaming.", correcta: false }
+                ],
+                explicacion: "Sin datos fiables, gastamos presupuesto en audiencias equivocadas[cite: 5]. Una campaña sin datos de calidad impacta al segmento equivocado, desperdiciando presupuesto y dañando reputación[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué tipo de dato son las transacciones bancarias, registros de clientes e inventarios?",
+                opciones: [
+                    { texto: "Datos estructurados.", correcta: true },
+                    { texto: "Datos no estructurados.", correcta: false },
+                    { texto: "Datos semi-estructurados.", correcta: false },
+                    { texto: "Datos multimedia.", correcta: false }
+                ],
+                explicacion: "Los datos estructurados están organizados en tablas y bases con esquema definido, como transacciones bancarias o registros de clientes[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Qué formato caracteriza a los datos semi-estructurados?",
+                opciones: [
+                    { texto: "JSON y XML con estructura flexible.", correcta: true },
+                    { texto: "Archivos de video y audio en bruto.", correcta: false },
+                    { texto: "Tablas SQL estrictas.", correcta: false },
+                    { texto: "Hojas de cálculo tradicionales.", correcta: false }
+                ],
+                explicacion: "Los datos semi-estructurados incluyen formatos flexibles como JSON y XML con estructura parcial pero sin esquema rígido[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Dónde reside a menudo el mayor valor oculto de los datos para el negocio?",
+                opciones: [
+                    { texto: "En los datos no estructurados (textos, reseñas, logs).", correcta: true },
+                    { texto: "Exclusivamente en los datos estructurados.", correcta: false },
+                    { texto: "En el hardware de almacenamiento.", correcta: false },
+                    { texto: "En los datos eliminados del sistema.", correcta: false }
+                ],
+                explicacion: "El valor real de los datos a menudo reside en lo no estructurado[cite: 6]. Muchas veces el valor real está en lo no estructurado, pero extraerlo exige técnicas especiales[cite: 5]."
+            },
+            {
+                pregunta: "¿Qué justifica que las empresas inviertan millones en almacenar y procesar datos?",
+                opciones: [
+                    { texto: "Generan ventaja competitiva sostenible, anticipan demanda y personalizan servicios.", correcta: true },
+                    { texto: "Evitar el uso de servicios en la nube.", correcta: false },
+                    { texto: "Eliminar la necesidad de personal de TI.", correcta: false },
+                    { texto: "Cumplir únicamente con requisitos de hardware antiguo.", correcta: false }
+                ],
+                explicacion: "Los datos bien gestionados generan ventaja competitiva: permiten anticipar demanda, personalizar ofertas, optimizar operaciones y lograr mayor lealtad del cliente[cite: 6]."
+            },
+            {
+                pregunta: "Ejemplo de dato estructurado, semi-estructurado y no estructurado, respectivamente:",
+                opciones: [
+                    { texto: "Venta en base de datos, archivo JSON, reseña de cliente en texto.", correcta: true },
+                    { texto: "Audio de WhatsApp, tabla SQL, archivo XML.", correcta: false },
+                    { texto: "Archivo XML, reseña de cliente, transacción bancaria.", correcta: false },
+                    { texto: "Video, log de sistema, base relacional.", correcta: false }
+                ],
+                explicacion: "Transacciones (SQL) son estructuradas; JSON/XML son semi-estructurados; textos libres (reseñas) son no estructurados[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Qué transforman los datos en el contexto empresarial?",
+                opciones: [
+                    { texto: "Transforman intuición en evidencia.", correcta: true },
+                    { texto: "Transforman hardware en software.", correcta: false },
+                    { texto: "Transforman datos estructurados en no estructurados.", correcta: false },
+                    { texto: "Transforman el cumplimiento legal en opciones voluntarias.", correcta: false }
+                ],
+                explicacion: "Los datos transforman intuición en evidencia y, al mismo tiempo, exponen a la organización si no se gestionan[cite: 5]."
+            },
+            {
+                pregunta: "¿Cuál de las siguientes empresas ejemplifica el uso de datos masivos para mejorar servicios y publicidad?",
+                opciones: [
+                    { texto: "Google", correcta: true },
+                    { texto: "Una refaccionaria local", correcta: false },
+                    { texto: "Un proveedor de hardware de red", correcta: false },
+                    { texto: "Un servicio de almacenamiento en frío", correcta: false }
+                ],
+                explicacion: "Google: análisis de datos masivos para mejora de servicios y publicidad[cite: 5]. Analiza comportamiento para mejorar relevancia de búsqueda y anuncios[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Cómo utiliza Netflix los datos según los casos de estudio?",
+                opciones: [
+                    { texto: "Para recomendaciones y decisiones de producción basadas en comportamiento.", correcta: true },
+                    { texto: "Para optimizar la cadena de suministro física de DVDs.", correcta: false },
+                    { texto: "Únicamente para facturación mensual.", correcta: false },
+                    { texto: "Para vender datos crudos a terceros.", correcta: false }
+                ],
+                explicacion: "Netflix: recomendaciones y decisiones de producción basadas en análisis de comportamiento[cite: 5]. Reducción de churn y aumento de engagement[cite: 6]."
+            },
+
+            // 11-20: Ciclo de vida y Trazabilidad
+            {
+                pregunta: "¿Cuál es el orden correcto de las primeras 4 etapas del ciclo de vida del dato?",
+                opciones: [
+                    { texto: "Captura, Almacenamiento, Procesamiento, Análisis.", correcta: true },
+                    { texto: "Almacenamiento, Captura, Análisis, Procesamiento.", correcta: false },
+                    { texto: "Procesamiento, Análisis, Almacenamiento, Consumo.", correcta: false },
+                    { texto: "Captura, Consumo, Análisis, Almacenamiento.", correcta: false }
+                ],
+                explicacion: "El ciclo sigue: 1. Captura, 2. Almacenamiento, 3. Procesamiento, 4. Análisis, 5. Consumo, 6. Retención y Eliminación[cite: 6]."
+            },
+            {
+                pregunta: "¿En qué etapa un registro en bruto se limpia, transforma y enriquece (ej. proceso ETL)?",
+                opciones: [
+                    { texto: "Procesamiento.", correcta: true },
+                    { texto: "Captura.", correcta: false },
+                    { texto: "Retención.", correcta: false },
+                    { texto: "Consumo.", correcta: false }
+                ],
+                explicacion: "El procesamiento (etapa 3) incluye limpieza, organización, y transformación (ETL), normalización y deduplicación[cite: 5, 6]."
+            },
+            {
+                pregunta: "Si un equipo de marketing usa segmentos generados para campañas personalizadas, ¿en qué etapa del ciclo se encuentran?",
+                opciones: [
+                    { texto: "Consumo.", correcta: true },
+                    { texto: "Almacenamiento.", correcta: false },
+                    { texto: "Captura.", correcta: false },
+                    { texto: "Eliminación.", correcta: false }
+                ],
+                explicacion: "Consumo: Marketing toma segmentos[cite: 5]. El consumo es donde la interfaz o el usuario aprovecha el dato[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué es el 'Lineage' de datos?",
+                opciones: [
+                    { texto: "El rastro del origen y las transformaciones de los datos a lo largo de su ciclo de vida.", correcta: true },
+                    { texto: "El proceso de eliminación segura de datos fiscales.", correcta: false },
+                    { texto: "Un motor de base de datos relacional.", correcta: false },
+                    { texto: "La captura inicial de datos no estructurados.", correcta: false }
+                ],
+                explicacion: "Lineage: rastro de origen y transformaciones[cite: 5]. Permite detectar en qué paso ocurrió un error y garantizar confianza en todo el ciclo[cite: 6]."
+            },
+            {
+                pregunta: "Si se descubre un reporte con cifras infladas o erróneas, ¿qué herramienta permite localizar la transformación exacta que introdujo el error?",
+                opciones: [
+                    { texto: "Lineage (trazabilidad).", correcta: true },
+                    { texto: "El Data Lake.", correcta: false },
+                    { texto: "El KPI de Freshness.", correcta: false },
+                    { texto: "El Catálogo de Datos.", correcta: false }
+                ],
+                explicacion: "El lineage permite, ante un informe erróneo, seguir paso a paso desde el origen hasta el reporte y localizar la transformación que generó la desviación[cite: 5]."
+            },
+            {
+                pregunta: "¿Qué es la Metadata?",
+                opciones: [
+                    { texto: "Información que describe qué es cada campo, su formato y propietario.", correcta: true },
+                    { texto: "El servidor físico donde se alojan los datos.", correcta: false },
+                    { texto: "Los datos eliminados legalmente.", correcta: false },
+                    { texto: "Un algoritmo predictivo de Machine Learning.", correcta: false }
+                ],
+                explicacion: "Metadata: descripción, formato, propietario[cite: 5]. Describe los campos de un dato, permitiendo interpretarlo correctamente[cite: 6]."
+            },
+            {
+                pregunta: "Al finalizar el plazo legal de un dato (ej. 5 años), ¿qué etapa del ciclo de vida debe ejecutarse?",
+                opciones: [
+                    { texto: "Retención / Eliminación segura.", correcta: true },
+                    { texto: "Consumo continuo.", correcta: false },
+                    { texto: "Extracción y Transformación (ETL).", correcta: false },
+                    { texto: "Captura secundaria.", correcta: false }
+                ],
+                explicacion: "Tras cumplir el plazo legal de retención (ej. 5 años según normativa fiscal), el dato se elimina de forma segura y trazable[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué es el Catálogo de Datos?",
+                opciones: [
+                    { texto: "Un inventario centralizado de datasets oficiales de la organización.", correcta: true },
+                    { texto: "Una tienda en línea donde se venden datos.", correcta: false },
+                    { texto: "El área de almacenamiento de copias de seguridad en cinta.", correcta: false },
+                    { texto: "Un documento legal sobre privacidad.", correcta: false }
+                ],
+                explicacion: "Catálogo: inventario centralizado de datasets oficiales de la organización[cite: 5, 6]. Facilita búsqueda y acceso controlado[cite: 6]."
+            },
+            {
+                pregunta: "¿Por qué el Lineage es considerado transversal en el ciclo de vida?",
+                opciones: [
+                    { texto: "Porque aplica desde la captura hasta la eliminación, registrando cada paso.", correcta: true },
+                    { texto: "Porque solo se usa en bases de datos relacionales.", correcta: false },
+                    { texto: "Porque es una función exclusiva del hardware.", correcta: false },
+                    { texto: "Porque transfiere datos a terceros transversalmente.", correcta: false }
+                ],
+                explicacion: "La línea transversal de Lineage garantiza la trazabilidad de cada transformación a lo largo del ciclo (las 6 etapas)[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Qué ocurre si no registramos el lineage durante las fases de procesamiento y análisis?",
+                opciones: [
+                    { texto: "No sabremos qué transformación introdujo un error si los datos fallan.", correcta: true },
+                    { texto: "El servidor rechazará la carga de datos.", correcta: false },
+                    { texto: "Los datos se vuelven públicos automáticamente.", correcta: false },
+                    { texto: "Mejora el rendimiento general del almacenamiento.", correcta: false }
+                ],
+                explicacion: "Si no registramos lineage, no sabremos qué transformación introdujo un error[cite: 5]."
+            },
+
+            // 21-30: Calidad de datos, Gobernanza y Privacidad
+            {
+                pregunta: "¿Qué dimensión de la calidad de datos asegura que dos sistemas no muestren información diferente sobre un mismo cliente?",
+                opciones: [
+                    { texto: "Consistencia.", correcta: true },
+                    { texto: "Exactitud.", correcta: false },
+                    { texto: "Completitud.", correcta: false },
+                    { texto: "Unicidad.", correcta: false }
+                ],
+                explicacion: "Consistencia es que dos sistemas no mientan distinto sobre el mismo cliente[cite: 5]. Datos coherentes y vigentes en todos los sistemas[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué rol de gobernanza es el responsable final del dato y decide su uso estratégico?",
+                opciones: [
+                    { texto: "Data Owner.", correcta: true },
+                    { texto: "Data Steward.", correcta: false },
+                    { texto: "Data Custodian.", correcta: false },
+                    { texto: "Data Analyst.", correcta: false }
+                ],
+                explicacion: "Data Owner: decide qué datos son críticos[cite: 5]. Responsable del dato y su uso estratégico[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué rol en la gobernanza de datos administra la infraestructura y el acceso técnico (el hardware y bases de datos)?",
+                opciones: [
+                    { texto: "Data Custodian.", correcta: true },
+                    { texto: "Data Steward.", correcta: false },
+                    { texto: "Data Owner.", correcta: false },
+                    { texto: "Data Miner.", correcta: false }
+                ],
+                explicacion: "El Data Custodian gestiona la infraestructura[cite: 5] y administra el acceso técnico[cite: 6]."
+            },
+            {
+                pregunta: "En el caso de la filtración del Padrón Electoral en México, ¿cuál fue una de las causas directas de la falta de gobernanza?",
+                opciones: [
+                    { texto: "No había Data Ownership definido; nadie se hizo responsable de vigilar la copia.", correcta: true },
+                    { texto: "Fallo de software y un hackeo ruso.", correcta: false },
+                    { texto: "Exceso de encriptación que corrompió los datos.", correcta: false },
+                    { texto: "El Padrón se procesaba en Streaming en vez de Batch.", correcta: false }
+                ],
+                explicacion: "El problema no fue hackeo. A) No definieron Data Ownership: Nadie se hizo responsable de vigilar la copia[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué es un KPI en el contexto de la salud de los datos?",
+                opciones: [
+                    { texto: "Métricas como 'Freshness', % de completitud y % de duplicados.", correcta: true },
+                    { texto: "Un algoritmo de Machine Learning.", correcta: false },
+                    { texto: "Una política de retención legal.", correcta: false },
+                    { texto: "Un rol de gobernanza.", correcta: false }
+                ],
+                explicacion: "KPIs y dashboards: medir la salud. Ejemplos: Freshness, % datos completos, % registros con errores, % duplicados, MTTR datos[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Qué mide la dimensión de 'Exactitud' en la calidad del dato?",
+                opciones: [
+                    { texto: "Que el dato coincida exactamente con la realidad del mundo físico/evento.", correcta: true },
+                    { texto: "Que no haya celdas vacías.", correcta: false },
+                    { texto: "Que el dato sea reciente.", correcta: false },
+                    { texto: "Que no haya datos duplicados.", correcta: false }
+                ],
+                explicacion: "Exactitud significa que el dato coincide con la realidad[cite: 5]. % registros con errores < 2%[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué indica la métrica (KPI) de 'Freshness' en un dashboard de salud de datos?",
+                opciones: [
+                    { texto: "Mide cuánto tiempo ha pasado desde la última actualización del dato.", correcta: true },
+                    { texto: "Mide la cantidad de datos eliminados.", correcta: false },
+                    { texto: "Mide el número de usuarios que acceden al sistema.", correcta: false },
+                    { texto: "Mide el nivel de encriptación del servidor.", correcta: false }
+                ],
+                explicacion: "Freshness mide cuánto tiempo desde la última actualización[cite: 5]."
+            },
+            {
+                pregunta: "¿Cuál es el objetivo del principio de 'Minimización' en las normativas de privacidad (GDPR, INAI)?",
+                opciones: [
+                    { texto: "Exige solo recopilar los datos estrictamente necesarios para el propósito.", correcta: true },
+                    { texto: "Minimizar los costos de servidores en la nube.", correcta: false },
+                    { texto: "Reducir el tamaño de los datos usando compresión ZIP.", correcta: false },
+                    { texto: "Acortar los tiempos del ciclo ETL.", correcta: false }
+                ],
+                explicacion: "Minimización exige solo recopilar lo necesario[cite: 5]. Principios Clave: Minimización, derechos y notificación de brechas[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué normativas de protección de datos se mencionan explícitamente para Europa y México, respectivamente?",
+                opciones: [
+                    { texto: "GDPR (UE) y LFPDPPP / INAI (MX).", correcta: true },
+                    { texto: "HIPAA y PCI-DSS.", correcta: false },
+                    { texto: "ISO 27001 e ISO 9001.", correcta: false },
+                    { texto: "ITIL v4 y COBIT.", correcta: false }
+                ],
+                explicacion: "Normativa aplicable: GDPR (UE) / INAI y LFPDPPP (MX)[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Por qué los datos sin gobernanza se consideran 'un peligro mortal'?",
+                opciones: [
+                    { texto: "Porque son propensos a hackeos, datos duplicados, multas legales y malas decisiones.", correcta: true },
+                    { texto: "Porque consumen demasiada electricidad en los servidores.", correcta: false },
+                    { texto: "Porque sobrecalientan los procesadores ETL.", correcta: false },
+                    { texto: "Porque obligan a usar inteligencia artificial.", correcta: false }
+                ],
+                explicacion: "Sin Gobernanza: Los datos son un peligro mortal... propensos a hackeos, datos duplicados, multas legales millonarias y decisiones equivocadas[cite: 6]."
+            },
+
+            // 31-40: Arquitectura, ETL/ELT y Stack
+            {
+                pregunta: "¿Qué significa ETL en la arquitectura de datos?",
+                opciones: [
+                    { texto: "Extract, Transform, Load (Extraer, Transformar, Cargar).", correcta: true },
+                    { texto: "Extract, Transmit, Lock.", correcta: false },
+                    { texto: "Execute, Test, Load.", correcta: false },
+                    { texto: "Encrypt, Transform, Link.", correcta: false }
+                ],
+                explicacion: "ETL (Extract-Transform-Load). Extrae, transforma (limpia, aplica reglas) y luego carga en el destino[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Cuál es la principal diferencia entre ETL y ELT?",
+                opciones: [
+                    { texto: "ETL transforma en un servidor intermedio antes de cargar; ELT carga datos crudos primero en la nube y los transforma ahí.", correcta: true },
+                    { texto: "ELT es exclusivo para bases de datos relacionales; ETL es para archivos de audio.", correcta: false },
+                    { texto: "ETL es moderno y elástico; ELT es obsoleto.", correcta: false },
+                    { texto: "No hay diferencia real, solo cambia el nombre comercial.", correcta: false }
+                ],
+                explicacion: "ETL transforma antes de cargar; ELT carga raw y transforma en destino[cite: 5]. ETL usa un servidor intermedio; ELT usa el cómputo elástico de la nube[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué patrón de arquitectura guarda datos estrictamente estructurados, con reglas rígidas, optimizados para reportes (BI)?",
+                opciones: [
+                    { texto: "Data Warehouse.", correcta: true },
+                    { texto: "Data Lake.", correcta: false },
+                    { texto: "Lakehouse.", correcta: false },
+                    { texto: "Kafka Streaming.", correcta: false }
+                ],
+                explicacion: "Data Warehouse almacena datos estructurados y listos para reporting con esquema definido[cite: 6]. Ejemplo: Excel con reglas estrictas[cite: 5]."
+            },
+            {
+                pregunta: "¿Qué patrón es equivalente a 'una carpeta con archivos sin clasificar (fotos, audios)' que almacena datos crudos (raw data) para exploración futura?",
+                opciones: [
+                    { texto: "Data Lake.", correcta: true },
+                    { texto: "Data Warehouse.", correcta: false },
+                    { texto: "Data Mart.", correcta: false },
+                    { texto: "OLTP Database.", correcta: false }
+                ],
+                explicacion: "Data Lake guarda raw data para exploración[cite: 5]. Acepta cualquier formato sin esquema rígido[cite: 6]."
+            },
+            {
+                pregunta: "Si una empresa necesita detectar un fraude con tarjeta de crédito en menos de 2 segundos, ¿qué método de procesamiento debe utilizar?",
+                opciones: [
+                    { texto: "Streaming.", correcta: true },
+                    { texto: "Batch.", correcta: false },
+                    { texto: "Data Warehouse Nocturno.", correcta: false },
+                    { texto: "ETL Programado cada 24 horas.", correcta: false }
+                ],
+                explicacion: "Streaming se usa cuando necesitamos detección en tiempo real, como en prevención de fraude[cite: 5, 6]."
+            },
+            {
+                pregunta: "¿Qué es el procesamiento Batch (por lotes)?",
+                opciones: [
+                    { texto: "Procesar grandes volúmenes de datos en intervalos programados (ej. todas las noches a las 3 AM).", correcta: true },
+                    { texto: "Procesar datos evento por evento en milisegundos.", correcta: false },
+                    { texto: "Eliminar datos manualmente uno por uno.", correcta: false },
+                    { texto: "El proceso de recolectar firmas digitales de usuarios.", correcta: false }
+                ],
+                explicacion: "Batch procesa grandes volúmenes en intervalos programados, ideal para reportes periódicos y consolidaciones[cite: 5, 6]."
+            },
+            {
+                pregunta: "En una Arquitectura Híbrida (como Lambda), ¿qué tecnologías se combinan generalmente?",
+                opciones: [
+                    { texto: "ELT + Streaming para velocidad (capa rápida) y ETL + Batch para reportes pesados (capa profunda).", correcta: true },
+                    { texto: "Solo servidores físicos sin uso de nube.", correcta: false },
+                    { texto: "Cintas magnéticas para velocidad y disquetes para Batch.", correcta: false },
+                    { texto: "Unicidad + Completitud en lugar de hardware.", correcta: false }
+                ],
+                explicacion: "Las arquitecturas híbridas usan ELT + Streaming en capa rápida para responder al instante, y ETL + Batch en capa profunda para reportes financieros al menor costo[cite: 6]."
+            },
+            {
+                pregunta: "¿Qué herramienta recomienda el material de estudio para iniciarse en la visualización e integración de datos antes de escalar a sistemas complejos?",
+                opciones: [
+                    { texto: "CSV y Power BI (o Excel/Google Sheets).", correcta: true },
+                    { texto: "Apache Kafka directamente.", correcta: false },
+                    { texto: "Programación avanzada en Scala y Databricks.", correcta: false },
+                    { texto: "Comprar licencias millonarias de Data Warehouse.", correcta: false }
+                ],
+                explicacion: "Recomendación práctica: empezar con CSV + Power BI. Herramientas de inicio: Power BI, Excel, Google Sheets[cite: 5]."
+            },
+            {
+                pregunta: "En el Stack Tecnológico mencionado, ¿qué herramienta es típica para Ingesta/Streaming de eventos?",
+                opciones: [
+                    { texto: "Apache Kafka.", correcta: true },
+                    { texto: "Tableau.", correcta: false },
+                    { texto: "Alation.", correcta: false },
+                    { texto: "Excel.", correcta: false }
+                ],
+                explicacion: "Ingesta/Streaming: Kafka[cite: 5]. Apache Kafka figura como tecnología clave de ingesta[cite: 6]."
+            },
+            {
+                pregunta: "Si los datos almacenados en un Data Warehouse son 'Garbage' (basura, imprecisos), ¿qué pasará con las decisiones tomadas con ellos?",
+                opciones: [
+                    { texto: "Serán decisiones erróneas o sesgadas (Garbage In, Garbage Out).", correcta: true },
+                    { texto: "El servidor corregirá automáticamente la información.", correcta: false },
+                    { texto: "El Data Owner será despedido inmediatamente por ley.", correcta: false },
+                    { texto: "Se convertirán mágicamente en un Lakehouse.", correcta: false }
+                ],
+                explicacion: "Si los datos de entrada son imprecisos o sesgados, la recomendación o decisión resultante también lo será (Garbage In, Garbage Out)[cite: 6]."
+            }
+        ];
+
+        let preguntasActuales = [];
+        let indiceActual = 0;
+        let puntaje = 0;
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
         }
-    ];
 
-    let currentQuestions = [];
-    let currentQuestionIndex = 0;
-    let score = 0;
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+        function iniciarExamen() {
+            // Reiniciar estado
+            puntaje = 0;
+            indiceActual = 0;
+            document.getElementById('score-display').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            
+            // Mezclar todas las preguntas y sus opciones
+            preguntasActuales = shuffleArray(bancoPreguntas).map(p => ({
+                ...p,
+                opciones: shuffleArray(p.opciones)
+            }));
+            
+            actualizarProgreso();
+            renderizarPregunta();
         }
-        return array;
-    }
 
-    function startQuiz() {
-        // Reset variables
-        currentQuestionIndex = 0;
-        score = 0;
-        document.getElementById('score-board').style.display = 'none';
-        document.getElementById('quiz-container').style.display = 'block';
-        
-        // Clone and shuffle questions
-        currentQuestions = JSON.parse(JSON.stringify(database));
-        shuffleArray(currentQuestions);
-        
-        // Shuffle options for each question
-        currentQuestions.forEach(q => shuffleArray(q.options));
+        function actualizarProgreso() {
+            const porcentaje = ((indiceActual) / preguntasActuales.length) * 100;
+            document.getElementById('progress-bar').style.width = `${porcentaje}%`;
+            document.getElementById('progress-text').innerText = `Pregunta ${indiceActual + 1} de ${preguntasActuales.length}`;
+        }
 
-        renderQuestion();
-    }
+        function renderizarPregunta() {
+            const container = document.getElementById('quiz-container');
+            const p = preguntasActuales[indiceActual];
+            
+            let html = `
+                <div class="question-block active">
+                    <div class="question-title">${indiceActual + 1}. ${p.pregunta}</div>
+            `;
+            
+            p.opciones.forEach((opcion, i) => {
+                html += `<button class="option-btn" onclick="verificarRespuesta(${i}, ${opcion.correcta}, this)">${opcion.texto}</button>`;
+            });
 
-    function renderQuestion() {
-        const qArea = document.getElementById('questions-area');
-        const qData = currentQuestions[currentQuestionIndex];
-        
-        document.getElementById('progress').innerText = `Pregunta ${currentQuestionIndex + 1} de ${currentQuestions.length}`;
-        document.getElementById('next-btn').style.display = 'none';
+            html += `
+                    <div class="explanation" id="exp-${indiceActual}">
+                        <strong>💡 Justificación:</strong> ${p.explicacion}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            document.getElementById('btn-next').disabled = true;
+        }
 
-        let html = `
-            <div class="question-box active">
-                <div class="question-text">${qData.q}</div>
-        `;
-
-        qData.options.forEach((opt, index) => {
-            html += `<div class="option" onclick="checkAnswer(this, ${opt.correct}, '${escapeHtml(qData.exp)}')">${opt.text}</div>`;
-        });
-
-        html += `
-                <div class="explanation" id="exp-${currentQuestionIndex}"></div>
-            </div>
-        `;
-
-        qArea.innerHTML = html;
-    }
-
-    function checkAnswer(element, isCorrect, explanationText) {
-        // Disable all options
-        const options = document.querySelectorAll('.option');
-        options.forEach(opt => opt.classList.add('disabled'));
-
-        // Highlight selected
-        if (isCorrect) {
-            element.classList.add('correct');
-            score++;
-        } else {
-            element.classList.add('incorrect');
-            // Show the correct one
-            options.forEach(opt => {
-                if (opt.onclick.toString().includes('true')) {
-                    opt.classList.add('correct');
+        function verificarRespuesta(indexOpcion, esCorrecta, btn) {
+            const botones = document.querySelectorAll('.option-btn');
+            botones.forEach(b => b.disabled = true);
+            
+            const opcionesActuales = preguntasActuales[indiceActual].opciones;
+            
+            botones.forEach((b, i) => {
+                if (opcionesActuales[i].correcta) {
+                    b.classList.add('correct');
                 }
             });
+
+            if (!esCorrecta) {
+                btn.classList.add('incorrect');
+            } else {
+                puntaje++;
+            }
+
+            document.getElementById(`exp-${indiceActual}`).style.display = 'block';
+            
+            const btnNext = document.getElementById('btn-next');
+            btnNext.disabled = false;
+            
+            if (indiceActual === preguntasActuales.length - 1) {
+                btnNext.innerText = "Finalizar Examen";
+            } else {
+                btnNext.innerText = "Siguiente Pregunta";
+            }
         }
 
-        // Show explanation
-        const expDiv = document.getElementById(`exp-${currentQuestionIndex}`);
-        expDiv.innerHTML = `<strong>Explicación:</strong> ${explanationText}`;
-        expDiv.style.display = 'block';
-
-        // Show next button
-        document.getElementById('next-btn').style.display = 'block';
-    }
-
-    function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < currentQuestions.length) {
-            renderQuestion();
-        } else {
-            showScore();
+        function siguientePregunta() {
+            if (indiceActual < preguntasActuales.length - 1) {
+                indiceActual++;
+                actualizarProgreso();
+                renderizarPregunta();
+            } else {
+                mostrarResultados();
+            }
         }
-    }
 
-    function showScore() {
-        document.getElementById('quiz-container').style.display = 'none';
-        const scoreBoard = document.getElementById('score-board');
-        scoreBoard.style.display = 'block';
-        
-        const percentage = Math.round((score / currentQuestions.length) * 100);
-        let message = "";
-        
-        if(percentage >= 90) message = "¡Excelente preparación!";
-        else if(percentage >= 70) message = "Buen trabajo, pero repasa algunos conceptos.";
-        else message = "Necesitas estudiar más las presentaciones.";
+        function mostrarResultados() {
+            document.getElementById('progress-bar').style.width = `100%`;
+            document.getElementById('progress-text').innerText = `Examen Finalizado`;
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('btn-next').disabled = true;
+            
+            const scoreDisplay = document.getElementById('score-display');
+            const porcentaje = Math.round((puntaje / preguntasActuales.length) * 100);
+            
+            let mensaje = "";
+            if(porcentaje >= 90) mensaje = "¡Excelente dominio del tema!";
+            else if(porcentaje >= 70) mensaje = "Buen trabajo, estás listo para el examen.";
+            else mensaje = "Te recomiendo repasar los conceptos de Gobernanza y Arquitectura.";
+            
+            document.getElementById('quiz-container').insertAdjacentHTML('afterend', `
+                <div class="score-display" id="score-display" style="display: block;">
+                    Tu calificación: ${puntaje} / ${preguntasActuales.length} (${porcentaje}%)<br>
+                    <span style="font-size: 0.6em; color: #6c757d;">${mensaje}</span>
+                </div>
+            `);
+        }
 
-        document.getElementById('score-text').innerHTML = `Obtuviste <strong>${score}</strong> de <strong>${currentQuestions.length}</strong> aciertos (${percentage}%).<br><br>${message}`;
-    }
-
-    function escapeHtml(text) {
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-    }
-
-    // Initialize quiz on load
-    window.onload = startQuiz;
-</script>
-
+        // Iniciar la primera vez que carga la página
+        window.onload = iniciarExamen;
+    </script>
 </body>
 </html>
