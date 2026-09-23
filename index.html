@@ -142,6 +142,9 @@
         <!-- Contenedor dinámico -->
     </div>
 
+    <!-- Contenedor del puntaje corregido -->
+    <div class="score-display" id="score-display"></div>
+
     <div class="controls">
         <button class="nav-btn" id="btn-restart" onclick="iniciarExamen()">Reiniciar Examen</button>
         <button class="nav-btn" id="btn-next" onclick="siguientePregunta()" disabled>Siguiente Pregunta</button>
@@ -158,7 +161,7 @@
                     { texto: "El dato se almacena en la nube, y la información en servidores físicos.", correcta: false },
                     { texto: "No hay diferencia, son sinónimos exactos en TI.", correcta: false }
                 ],
-                explicacion: "Sin contexto, el dato carece de utilidad[cite: 6]. El contexto (metadata) vuelve interpretable al dato[cite: 5]. Dato + metadata = información accionable[cite: 6]."
+                explicacion: "Sin contexto, el dato carece de utilidad. El contexto (metadata) vuelve interpretable al dato. Dato + metadata = información accionable."
             },
             {
                 pregunta: "¿Cuál es el riesgo principal de tomar decisiones en una campaña de marketing sin datos fiables?",
@@ -168,7 +171,7 @@
                     { texto: "La eliminación accidental del catálogo de datos.", correcta: false },
                     { texto: "La conversión automática de datos Batch a Streaming.", correcta: false }
                 ],
-                explicacion: "Sin datos fiables, gastamos presupuesto en audiencias equivocadas[cite: 5]. Una campaña sin datos de calidad impacta al segmento equivocado, desperdiciando presupuesto y dañando reputación[cite: 6]."
+                explicacion: "Sin datos fiables, gastamos presupuesto en audiencias equivocadas. Una campaña sin datos de calidad impacta al segmento equivocado, desperdiciando presupuesto y dañando reputación."
             },
             {
                 pregunta: "¿Qué tipo de dato son las transacciones bancarias, registros de clientes e inventarios?",
@@ -178,7 +181,7 @@
                     { texto: "Datos semi-estructurados.", correcta: false },
                     { texto: "Datos multimedia.", correcta: false }
                 ],
-                explicacion: "Los datos estructurados están organizados en tablas y bases con esquema definido, como transacciones bancarias o registros de clientes[cite: 5, 6]."
+                explicacion: "Los datos estructurados están organizados en tablas y bases con esquema definido, como transacciones bancarias o registros de clientes."
             },
             {
                 pregunta: "¿Qué formato caracteriza a los datos semi-estructurados?",
@@ -188,7 +191,7 @@
                     { texto: "Tablas SQL estrictas.", correcta: false },
                     { texto: "Hojas de cálculo tradicionales.", correcta: false }
                 ],
-                explicacion: "Los datos semi-estructurados incluyen formatos flexibles como JSON y XML con estructura parcial pero sin esquema rígido[cite: 5, 6]."
+                explicacion: "Los datos semi-estructurados incluyen formatos flexibles como JSON y XML con estructura parcial pero sin esquema rígido."
             },
             {
                 pregunta: "¿Dónde reside a menudo el mayor valor oculto de los datos para el negocio?",
@@ -198,7 +201,7 @@
                     { texto: "En el hardware de almacenamiento.", correcta: false },
                     { texto: "En los datos eliminados del sistema.", correcta: false }
                 ],
-                explicacion: "El valor real de los datos a menudo reside en lo no estructurado[cite: 6]. Muchas veces el valor real está en lo no estructurado, pero extraerlo exige técnicas especiales[cite: 5]."
+                explicacion: "El valor real de los datos a menudo reside en lo no estructurado. Extraerlo exige técnicas especiales, pero aporta gran ventaja competitiva."
             },
             {
                 pregunta: "¿Qué justifica que las empresas inviertan millones en almacenar y procesar datos?",
@@ -208,7 +211,7 @@
                     { texto: "Eliminar la necesidad de personal de TI.", correcta: false },
                     { texto: "Cumplir únicamente con requisitos de hardware antiguo.", correcta: false }
                 ],
-                explicacion: "Los datos bien gestionados generan ventaja competitiva: permiten anticipar demanda, personalizar ofertas, optimizar operaciones y lograr mayor lealtad del cliente[cite: 6]."
+                explicacion: "Los datos bien gestionados generan ventaja competitiva: permiten anticipar demanda, personalizar ofertas, optimizar operaciones y lograr mayor lealtad del cliente."
             },
             {
                 pregunta: "Ejemplo de dato estructurado, semi-estructurado y no estructurado, respectivamente:",
@@ -218,7 +221,7 @@
                     { texto: "Archivo XML, reseña de cliente, transacción bancaria.", correcta: false },
                     { texto: "Video, log de sistema, base relacional.", correcta: false }
                 ],
-                explicacion: "Transacciones (SQL) son estructuradas; JSON/XML son semi-estructurados; textos libres (reseñas) son no estructurados[cite: 5, 6]."
+                explicacion: "Transacciones (SQL) son estructuradas; JSON/XML son semi-estructurados; textos libres (reseñas) son no estructurados."
             },
             {
                 pregunta: "¿Qué transforman los datos en el contexto empresarial?",
@@ -228,7 +231,7 @@
                     { texto: "Transforman datos estructurados en no estructurados.", correcta: false },
                     { texto: "Transforman el cumplimiento legal en opciones voluntarias.", correcta: false }
                 ],
-                explicacion: "Los datos transforman intuición en evidencia y, al mismo tiempo, exponen a la organización si no se gestionan[cite: 5]."
+                explicacion: "Los datos transforman intuición en evidencia y, al mismo tiempo, exponen a la organización si no se gestionan correctamente."
             },
             {
                 pregunta: "¿Cuál de las siguientes empresas ejemplifica el uso de datos masivos para mejorar servicios y publicidad?",
@@ -238,7 +241,7 @@
                     { texto: "Un proveedor de hardware de red", correcta: false },
                     { texto: "Un servicio de almacenamiento en frío", correcta: false }
                 ],
-                explicacion: "Google: análisis de datos masivos para mejora de servicios y publicidad[cite: 5]. Analiza comportamiento para mejorar relevancia de búsqueda y anuncios[cite: 5, 6]."
+                explicacion: "Google realiza análisis de datos masivos para mejora continua de servicios, relevancia de búsqueda y publicidad dirigida."
             },
             {
                 pregunta: "¿Cómo utiliza Netflix los datos según los casos de estudio?",
@@ -248,7 +251,7 @@
                     { texto: "Únicamente para facturación mensual.", correcta: false },
                     { texto: "Para vender datos crudos a terceros.", correcta: false }
                 ],
-                explicacion: "Netflix: recomendaciones y decisiones de producción basadas en análisis de comportamiento[cite: 5]. Reducción de churn y aumento de engagement[cite: 6]."
+                explicacion: "Netflix usa los datos para recomendaciones y decisiones de producción basadas en análisis de comportamiento, reduciendo el churn de usuarios."
             },
 
             // 11-20: Ciclo de vida y Trazabilidad
@@ -260,7 +263,7 @@
                     { texto: "Procesamiento, Análisis, Almacenamiento, Consumo.", correcta: false },
                     { texto: "Captura, Consumo, Análisis, Almacenamiento.", correcta: false }
                 ],
-                explicacion: "El ciclo sigue: 1. Captura, 2. Almacenamiento, 3. Procesamiento, 4. Análisis, 5. Consumo, 6. Retención y Eliminación[cite: 6]."
+                explicacion: "El ciclo sigue: 1. Captura, 2. Almacenamiento, 3. Procesamiento, 4. Análisis, 5. Consumo, 6. Retención y Eliminación."
             },
             {
                 pregunta: "¿En qué etapa un registro en bruto se limpia, transforma y enriquece (ej. proceso ETL)?",
@@ -270,7 +273,7 @@
                     { texto: "Retención.", correcta: false },
                     { texto: "Consumo.", correcta: false }
                 ],
-                explicacion: "El procesamiento (etapa 3) incluye limpieza, organización, y transformación (ETL), normalización y deduplicación[cite: 5, 6]."
+                explicacion: "El procesamiento (etapa 3) incluye limpieza, organización, y transformación (ETL), normalización y deduplicación."
             },
             {
                 pregunta: "Si un equipo de marketing usa segmentos generados para campañas personalizadas, ¿en qué etapa del ciclo se encuentran?",
@@ -280,7 +283,7 @@
                     { texto: "Captura.", correcta: false },
                     { texto: "Eliminación.", correcta: false }
                 ],
-                explicacion: "Consumo: Marketing toma segmentos[cite: 5]. El consumo es donde la interfaz o el usuario aprovecha el dato[cite: 6]."
+                explicacion: "Consumo es la fase donde la interfaz, el equipo de negocio (marketing) o el usuario final aprovechan el dato analizado."
             },
             {
                 pregunta: "¿Qué es el 'Lineage' de datos?",
@@ -290,7 +293,7 @@
                     { texto: "Un motor de base de datos relacional.", correcta: false },
                     { texto: "La captura inicial de datos no estructurados.", correcta: false }
                 ],
-                explicacion: "Lineage: rastro de origen y transformaciones[cite: 5]. Permite detectar en qué paso ocurrió un error y garantizar confianza en todo el ciclo[cite: 6]."
+                explicacion: "Lineage: rastro de origen y transformaciones. Permite detectar en qué paso ocurrió un error y garantizar confianza en todo el ciclo."
             },
             {
                 pregunta: "Si se descubre un reporte con cifras infladas o erróneas, ¿qué herramienta permite localizar la transformación exacta que introdujo el error?",
@@ -300,7 +303,7 @@
                     { texto: "El KPI de Freshness.", correcta: false },
                     { texto: "El Catálogo de Datos.", correcta: false }
                 ],
-                explicacion: "El lineage permite, ante un informe erróneo, seguir paso a paso desde el origen hasta el reporte y localizar la transformación que generó la desviación[cite: 5]."
+                explicacion: "El lineage permite, ante un informe erróneo, seguir paso a paso desde el origen hasta el reporte y localizar la transformación que generó la desviación."
             },
             {
                 pregunta: "¿Qué es la Metadata?",
@@ -310,7 +313,7 @@
                     { texto: "Los datos eliminados legalmente.", correcta: false },
                     { texto: "Un algoritmo predictivo de Machine Learning.", correcta: false }
                 ],
-                explicacion: "Metadata: descripción, formato, propietario[cite: 5]. Describe los campos de un dato, permitiendo interpretarlo correctamente[cite: 6]."
+                explicacion: "Metadata: descripción, formato, propietario. Describe los campos de un dato, permitiendo interpretarlo correctamente."
             },
             {
                 pregunta: "Al finalizar el plazo legal de un dato (ej. 5 años), ¿qué etapa del ciclo de vida debe ejecutarse?",
@@ -320,7 +323,7 @@
                     { texto: "Extracción y Transformación (ETL).", correcta: false },
                     { texto: "Captura secundaria.", correcta: false }
                 ],
-                explicacion: "Tras cumplir el plazo legal de retención (ej. 5 años según normativa fiscal), el dato se elimina de forma segura y trazable[cite: 6]."
+                explicacion: "Tras cumplir el plazo legal de retención, el dato se elimina de forma segura y trazable para cumplir con normativas de privacidad."
             },
             {
                 pregunta: "¿Qué es el Catálogo de Datos?",
@@ -330,7 +333,7 @@
                     { texto: "El área de almacenamiento de copias de seguridad en cinta.", correcta: false },
                     { texto: "Un documento legal sobre privacidad.", correcta: false }
                 ],
-                explicacion: "Catálogo: inventario centralizado de datasets oficiales de la organización[cite: 5, 6]. Facilita búsqueda y acceso controlado[cite: 6]."
+                explicacion: "Catálogo: inventario centralizado de datasets oficiales de la organización. Facilita búsqueda y acceso controlado."
             },
             {
                 pregunta: "¿Por qué el Lineage es considerado transversal en el ciclo de vida?",
@@ -340,7 +343,7 @@
                     { texto: "Porque es una función exclusiva del hardware.", correcta: false },
                     { texto: "Porque transfiere datos a terceros transversalmente.", correcta: false }
                 ],
-                explicacion: "La línea transversal de Lineage garantiza la trazabilidad de cada transformación a lo largo del ciclo (las 6 etapas)[cite: 5, 6]."
+                explicacion: "La línea transversal de Lineage garantiza la trazabilidad de cada transformación a lo largo de todo el ciclo de vida, conectando todas las etapas."
             },
             {
                 pregunta: "¿Qué ocurre si no registramos el lineage durante las fases de procesamiento y análisis?",
@@ -350,7 +353,7 @@
                     { texto: "Los datos se vuelven públicos automáticamente.", correcta: false },
                     { texto: "Mejora el rendimiento general del almacenamiento.", correcta: false }
                 ],
-                explicacion: "Si no registramos lineage, no sabremos qué transformación introdujo un error[cite: 5]."
+                explicacion: "Sin Lineage perdemos la visibilidad de qué proceso o persona modificó el dato originalmente crudo hasta convertirlo en el reporte final."
             },
 
             // 21-30: Calidad de datos, Gobernanza y Privacidad
@@ -362,7 +365,7 @@
                     { texto: "Completitud.", correcta: false },
                     { texto: "Unicidad.", correcta: false }
                 ],
-                explicacion: "Consistencia es que dos sistemas no mientan distinto sobre el mismo cliente[cite: 5]. Datos coherentes y vigentes en todos los sistemas[cite: 6]."
+                explicacion: "Consistencia es que dos sistemas no mientan distinto sobre el mismo cliente; garantiza que los datos sean coherentes en toda la infraestructura."
             },
             {
                 pregunta: "¿Qué rol de gobernanza es el responsable final del dato y decide su uso estratégico?",
@@ -372,7 +375,7 @@
                     { texto: "Data Custodian.", correcta: false },
                     { texto: "Data Analyst.", correcta: false }
                 ],
-                explicacion: "Data Owner: decide qué datos son críticos[cite: 5]. Responsable del dato y su uso estratégico[cite: 6]."
+                explicacion: "Data Owner: responsable principal del dato, decide qué datos son críticos y avala su uso estratégico en el negocio."
             },
             {
                 pregunta: "¿Qué rol en la gobernanza de datos administra la infraestructura y el acceso técnico (el hardware y bases de datos)?",
@@ -382,7 +385,7 @@
                     { texto: "Data Owner.", correcta: false },
                     { texto: "Data Miner.", correcta: false }
                 ],
-                explicacion: "El Data Custodian gestiona la infraestructura[cite: 5] y administra el acceso técnico[cite: 6]."
+                explicacion: "El Data Custodian gestiona la infraestructura tecnológica, los respaldos y administra el acceso técnico directo a los servidores."
             },
             {
                 pregunta: "En el caso de la filtración del Padrón Electoral en México, ¿cuál fue una de las causas directas de la falta de gobernanza?",
@@ -392,7 +395,7 @@
                     { texto: "Exceso de encriptación que corrompió los datos.", correcta: false },
                     { texto: "El Padrón se procesaba en Streaming en vez de Batch.", correcta: false }
                 ],
-                explicacion: "El problema no fue hackeo. A) No definieron Data Ownership: Nadie se hizo responsable de vigilar la copia[cite: 6]."
+                explicacion: "El problema no fue técnico (no hubo hackeo), sino de gobernanza: nadie fungió como Data Owner para vigilar la copia y evitar su acceso libre."
             },
             {
                 pregunta: "¿Qué es un KPI en el contexto de la salud de los datos?",
@@ -402,7 +405,7 @@
                     { texto: "Una política de retención legal.", correcta: false },
                     { texto: "Un rol de gobernanza.", correcta: false }
                 ],
-                explicacion: "KPIs y dashboards: medir la salud. Ejemplos: Freshness, % datos completos, % registros con errores, % duplicados, MTTR datos[cite: 5, 6]."
+                explicacion: "Los KPIs sirven para medir la salud operativa de los datos. Ejemplos incluyen el Freshness, la tasa de duplicados o el MTTR (tiempo medio para resolver errores)."
             },
             {
                 pregunta: "¿Qué mide la dimensión de 'Exactitud' en la calidad del dato?",
@@ -412,7 +415,7 @@
                     { texto: "Que el dato sea reciente.", correcta: false },
                     { texto: "Que no haya datos duplicados.", correcta: false }
                 ],
-                explicacion: "Exactitud significa que el dato coincide con la realidad[cite: 5]. % registros con errores < 2%[cite: 6]."
+                explicacion: "Exactitud significa que el dato refleja fielmente el evento real que intenta representar (ej. que la temperatura guardada sea la misma que capturó el sensor)."
             },
             {
                 pregunta: "¿Qué indica la métrica (KPI) de 'Freshness' en un dashboard de salud de datos?",
@@ -422,7 +425,7 @@
                     { texto: "Mide el número de usuarios que acceden al sistema.", correcta: false },
                     { texto: "Mide el nivel de encriptación del servidor.", correcta: false }
                 ],
-                explicacion: "Freshness mide cuánto tiempo desde la última actualización[cite: 5]."
+                explicacion: "Freshness (Frescura) mide el nivel de actualización de los datos, indicando si los reportes están consumiendo información del día de hoy o de la semana pasada."
             },
             {
                 pregunta: "¿Cuál es el objetivo del principio de 'Minimización' en las normativas de privacidad (GDPR, INAI)?",
@@ -432,7 +435,7 @@
                     { texto: "Reducir el tamaño de los datos usando compresión ZIP.", correcta: false },
                     { texto: "Acortar los tiempos del ciclo ETL.", correcta: false }
                 ],
-                explicacion: "Minimización exige solo recopilar lo necesario[cite: 5]. Principios Clave: Minimización, derechos y notificación de brechas[cite: 6]."
+                explicacion: "La minimización legal exige a las empresas que no pidan datos que no van a usar directamente para el servicio (ej. no pedir tipo de sangre para una cuenta de Netflix)."
             },
             {
                 pregunta: "¿Qué normativas de protección de datos se mencionan explícitamente para Europa y México, respectivamente?",
@@ -442,7 +445,7 @@
                     { texto: "ISO 27001 e ISO 9001.", correcta: false },
                     { texto: "ITIL v4 y COBIT.", correcta: false }
                 ],
-                explicacion: "Normativa aplicable: GDPR (UE) / INAI y LFPDPPP (MX)[cite: 5, 6]."
+                explicacion: "El GDPR es la normativa líder en la Unión Europea, mientras que la LFPDPPP es la ley aplicada en México y vigilada por el INAI."
             },
             {
                 pregunta: "¿Por qué los datos sin gobernanza se consideran 'un peligro mortal'?",
@@ -452,7 +455,7 @@
                     { texto: "Porque sobrecalientan los procesadores ETL.", correcta: false },
                     { texto: "Porque obligan a usar inteligencia artificial.", correcta: false }
                 ],
-                explicacion: "Sin Gobernanza: Los datos son un peligro mortal... propensos a hackeos, datos duplicados, multas legales millonarias y decisiones equivocadas[cite: 6]."
+                explicacion: "Sin lineamientos ni dueños claros, la empresa se expone financieramente a multas y operativamente a tomar decisiones basadas en información basura."
             },
 
             // 31-40: Arquitectura, ETL/ELT y Stack
@@ -464,7 +467,7 @@
                     { texto: "Execute, Test, Load.", correcta: false },
                     { texto: "Encrypt, Transform, Link.", correcta: false }
                 ],
-                explicacion: "ETL (Extract-Transform-Load). Extrae, transforma (limpia, aplica reglas) y luego carga en el destino[cite: 5, 6]."
+                explicacion: "ETL (Extract-Transform-Load) extrae datos de la fuente, aplica reglas estrictas de limpieza en un servidor intermedio y luego los carga listos para consumir."
             },
             {
                 pregunta: "¿Cuál es la principal diferencia entre ETL y ELT?",
@@ -474,7 +477,7 @@
                     { texto: "ETL es moderno y elástico; ELT es obsoleto.", correcta: false },
                     { texto: "No hay diferencia real, solo cambia el nombre comercial.", correcta: false }
                 ],
-                explicacion: "ETL transforma antes de cargar; ELT carga raw y transforma en destino[cite: 5]. ETL usa un servidor intermedio; ELT usa el cómputo elástico de la nube[cite: 6]."
+                explicacion: "En ELT (Extract-Load-Transform) se sube el 'dato crudo' directo al Data Lake y se usa la potencia de la nube para transformarlo bajo demanda."
             },
             {
                 pregunta: "¿Qué patrón de arquitectura guarda datos estrictamente estructurados, con reglas rígidas, optimizados para reportes (BI)?",
@@ -484,7 +487,7 @@
                     { texto: "Lakehouse.", correcta: false },
                     { texto: "Kafka Streaming.", correcta: false }
                 ],
-                explicacion: "Data Warehouse almacena datos estructurados y listos para reporting con esquema definido[cite: 6]. Ejemplo: Excel con reglas estrictas[cite: 5]."
+                explicacion: "Un Data Warehouse es como un almacén altamente ordenado; solo acepta datos limpios y estructurados, optimizando las consultas SQL y los Dashboards."
             },
             {
                 pregunta: "¿Qué patrón es equivalente a 'una carpeta con archivos sin clasificar (fotos, audios)' que almacena datos crudos (raw data) para exploración futura?",
@@ -494,7 +497,7 @@
                     { texto: "Data Mart.", correcta: false },
                     { texto: "OLTP Database.", correcta: false }
                 ],
-                explicacion: "Data Lake guarda raw data para exploración[cite: 5]. Acepta cualquier formato sin esquema rígido[cite: 6]."
+                explicacion: "Un Data Lake funciona como un gran lago donde se vierte toda la información cruda (logs, imágenes, JSON) sin necesidad de darle una estructura previa."
             },
             {
                 pregunta: "Si una empresa necesita detectar un fraude con tarjeta de crédito en menos de 2 segundos, ¿qué método de procesamiento debe utilizar?",
@@ -504,7 +507,7 @@
                     { texto: "Data Warehouse Nocturno.", correcta: false },
                     { texto: "ETL Programado cada 24 horas.", correcta: false }
                 ],
-                explicacion: "Streaming se usa cuando necesitamos detección en tiempo real, como en prevención de fraude[cite: 5, 6]."
+                explicacion: "El procesamiento Streaming analiza eventos uno por uno en tiempo real (milisegundos) y es vital para sistemas de alarmas o fraudes."
             },
             {
                 pregunta: "¿Qué es el procesamiento Batch (por lotes)?",
@@ -514,7 +517,7 @@
                     { texto: "Eliminar datos manualmente uno por uno.", correcta: false },
                     { texto: "El proceso de recolectar firmas digitales de usuarios.", correcta: false }
                 ],
-                explicacion: "Batch procesa grandes volúmenes en intervalos programados, ideal para reportes periódicos y consolidaciones[cite: 5, 6]."
+                explicacion: "Batch es altamente eficiente para consolidar ventas diarias, calcular nóminas y armar reportes que no requieren urgencia de microsegundos."
             },
             {
                 pregunta: "En una Arquitectura Híbrida (como Lambda), ¿qué tecnologías se combinan generalmente?",
@@ -524,7 +527,7 @@
                     { texto: "Cintas magnéticas para velocidad y disquetes para Batch.", correcta: false },
                     { texto: "Unicidad + Completitud en lugar de hardware.", correcta: false }
                 ],
-                explicacion: "Las arquitecturas híbridas usan ELT + Streaming en capa rápida para responder al instante, y ETL + Batch en capa profunda para reportes financieros al menor costo[cite: 6]."
+                explicacion: "La arquitectura híbrida asegura que el cliente tenga respuestas rápidas (streaming) mientras la empresa consolida financieramente en la noche a bajo costo (batch)."
             },
             {
                 pregunta: "¿Qué herramienta recomienda el material de estudio para iniciarse en la visualización e integración de datos antes de escalar a sistemas complejos?",
@@ -534,7 +537,7 @@
                     { texto: "Programación avanzada en Scala y Databricks.", correcta: false },
                     { texto: "Comprar licencias millonarias de Data Warehouse.", correcta: false }
                 ],
-                explicacion: "Recomendación práctica: empezar con CSV + Power BI. Herramientas de inicio: Power BI, Excel, Google Sheets[cite: 5]."
+                explicacion: "Para entender las dimensiones del dato y la calidad, un CSV con PowerBI es suficiente para iniciar prácticas reales antes de pagar servicios robustos de nube."
             },
             {
                 pregunta: "En el Stack Tecnológico mencionado, ¿qué herramienta es típica para Ingesta/Streaming de eventos?",
@@ -544,7 +547,7 @@
                     { texto: "Alation.", correcta: false },
                     { texto: "Excel.", correcta: false }
                 ],
-                explicacion: "Ingesta/Streaming: Kafka[cite: 5]. Apache Kafka figura como tecnología clave de ingesta[cite: 6]."
+                explicacion: "Apache Kafka es el líder en la industria para capturar y distribuir millones de eventos en tiempo real (streaming)."
             },
             {
                 pregunta: "Si los datos almacenados en un Data Warehouse son 'Garbage' (basura, imprecisos), ¿qué pasará con las decisiones tomadas con ellos?",
@@ -554,7 +557,7 @@
                     { texto: "El Data Owner será despedido inmediatamente por ley.", correcta: false },
                     { texto: "Se convertirán mágicamente en un Lakehouse.", correcta: false }
                 ],
-                explicacion: "Si los datos de entrada son imprecisos o sesgados, la recomendación o decisión resultante también lo será (Garbage In, Garbage Out)[cite: 6]."
+                explicacion: "La regla de oro 'Garbage In, Garbage Out' significa que si la entrada de tu sistema es basura, tu estrategia comercial basada en ese dashboard también será basura."
             }
         ];
 
@@ -664,7 +667,6 @@
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('btn-next').disabled = true;
             
-            const scoreDisplay = document.getElementById('score-display');
             const porcentaje = Math.round((puntaje / preguntasActuales.length) * 100);
             
             let mensaje = "";
@@ -672,12 +674,12 @@
             else if(porcentaje >= 70) mensaje = "Buen trabajo, estás listo para el examen.";
             else mensaje = "Te recomiendo repasar los conceptos de Gobernanza y Arquitectura.";
             
-            document.getElementById('quiz-container').insertAdjacentHTML('afterend', `
-                <div class="score-display" id="score-display" style="display: block;">
-                    Tu calificación: ${puntaje} / ${preguntasActuales.length} (${porcentaje}%)<br>
-                    <span style="font-size: 0.6em; color: #6c757d;">${mensaje}</span>
-                </div>
-            `);
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.innerHTML = `
+                Tu calificación: ${puntaje} / ${preguntasActuales.length} (${porcentaje}%)<br>
+                <span style="font-size: 0.6em; color: #6c757d; display:block; margin-top:10px;">${mensaje}</span>
+            `;
+            scoreDisplay.style.display = 'block';
         }
 
         // Iniciar la primera vez que carga la página
